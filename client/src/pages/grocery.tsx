@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoppingCart, Truck, Store, MapPin, Clock, DollarSign, Settings, Tag, Plus } from "lucide-react";
+import { ShoppingCart, Truck, Store, MapPin, Clock, DollarSign, Settings, Tag, Plus, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +23,7 @@ interface DeliveryOption {
   minimumOrder: string;
   available: boolean;
   estimatedDelivery: string;
+  website?: string;
 }
 
 interface Deal {
@@ -132,17 +133,19 @@ export default function Grocery() {
       deliveryFee: "9.95",
       minimumOrder: "35.00",
       available: true,
-      estimatedDelivery: "Today by 6:00 PM"
+      estimatedDelivery: "Today by 6:00 PM",
+      website: "https://www.wholefoodsmarket.com"
     },
     {
       id: 2,
       storeId: 2,
-      storeName: "Instacart (Safeway)",
+      storeName: "Instacart",
       deliveryTime: "1-3 hours",
       deliveryFee: "7.99",
       minimumOrder: "25.00",
       available: true,
-      estimatedDelivery: "Today by 4:00 PM"
+      estimatedDelivery: "Today by 4:00 PM",
+      website: "https://www.instacart.com"
     },
     {
       id: 3,
@@ -152,7 +155,41 @@ export default function Grocery() {
       deliveryFee: "0.00",
       minimumOrder: "50.00",
       available: true,
-      estimatedDelivery: "Tomorrow by 10:00 AM"
+      estimatedDelivery: "Tomorrow by 10:00 AM",
+      website: "https://www.amazon.com/fresh"
+    },
+    {
+      id: 4,
+      storeId: 4,
+      storeName: "Kroger Fresh",
+      deliveryTime: "2-3 hours",
+      deliveryFee: "8.95",
+      minimumOrder: "30.00",
+      available: true,
+      estimatedDelivery: "Today by 5:00 PM",
+      website: "https://www.kroger.com/d/delivery"
+    },
+    {
+      id: 5,
+      storeId: 5,
+      storeName: "DoorDash",
+      deliveryTime: "30-60 min",
+      deliveryFee: "4.99",
+      minimumOrder: "15.00",
+      available: true,
+      estimatedDelivery: "Today by 3:00 PM",
+      website: "https://www.doordash.com"
+    },
+    {
+      id: 6,
+      storeId: 6,
+      storeName: "Uber Eats",
+      deliveryTime: "25-45 min",
+      deliveryFee: "3.99",
+      minimumOrder: "12.00",
+      available: true,
+      estimatedDelivery: "Today by 2:30 PM",
+      website: "https://www.ubereats.com"
     }
   ];
 
@@ -383,7 +420,21 @@ export default function Grocery() {
                 <Card key={option.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{option.storeName}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {option.website ? (
+                          <a 
+                            href={option.website} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                          >
+                            {option.storeName}
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        ) : (
+                          option.storeName
+                        )}
+                      </CardTitle>
                       {option.available ? (
                         <Badge variant="default">Available</Badge>
                       ) : (
@@ -476,7 +527,19 @@ export default function Grocery() {
                   <CardHeader>
                     <CardTitle className="flex items-center">
                       <Store className="h-5 w-5 mr-2" />
-                      {store.storeName}
+                      {store.website ? (
+                        <a 
+                          href={store.website} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                        >
+                          {store.storeName}
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      ) : (
+                        store.storeName
+                      )}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
