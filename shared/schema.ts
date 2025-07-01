@@ -8,6 +8,7 @@ import {
   serial,
   integer,
   boolean,
+  decimal,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -132,6 +133,115 @@ export const cookingHistory = pgTable("cooking_history", {
   cookedAt: timestamp("cooked_at").defaultNow(),
 });
 
+// Kitchen Equipment
+export const kitchenEquipment = pgTable("kitchen_equipment", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: varchar("name").notNull(),
+  type: varchar("type").notNull(), // instant-pot, air-fryer, slow-cooker, oven, etc.
+  brand: varchar("brand"),
+  model: varchar("model"),
+  capacity: varchar("capacity"),
+  features: text("features").array(), // ["pressure-cook", "sauté", "rice", etc.]
+  isSmartDevice: boolean("is_smart_device").default(false),
+  apiEndpoint: varchar("api_endpoint"), // for smart device integration
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Grocery Stores & Pricing
+export const groceryStores = pgTable("grocery_stores", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  chain: varchar("chain"),
+  location: varchar("location"),
+  apiKey: varchar("api_key"), // for delivery integration
+  deliveryAvailable: boolean("delivery_available").default(false),
+  minimumOrder: varchar("minimum_order"),
+  deliveryFee: varchar("delivery_fee"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Ingredient Prices
+export const ingredientPrices = pgTable("ingredient_prices", {
+  id: serial("id").primaryKey(),
+  ingredientName: varchar("ingredient_name").notNull(),
+  storeId: integer("store_id").references(() => groceryStores.id, { onDelete: "cascade" }),
+  price: varchar("price").notNull(),
+  unit: varchar("unit").notNull(), // lb, oz, each, etc.
+  packageSize: varchar("package_size"), // "1 lb bag", "6-pack", etc.
+  brand: varchar("brand"),
+  isOrganic: boolean("is_organic").default(false),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Recipe Costs
+export const recipeCosts = pgTable("recipe_costs", {
+  id: serial("id").primaryKey(),
+  recipeId: integer("recipe_id").notNull().references(() => recipes.id, { onDelete: "cascade" }),
+  totalCost: varchar("total_cost").notNull(),
+  costPerServing: varchar("cost_per_serving").notNull(),
+  calculatedAt: timestamp("calculated_at").defaultNow(),
+  ingredientCosts: jsonb("ingredient_costs").notNull(), // detailed breakdown
+});
+
+// Nutrition Data
+export const nutritionData = pgTable("nutrition_data", {
+  id: serial("id").primaryKey(),
+  recipeId: integer("recipe_id").notNull().references(() => recipes.id, { onDelete: "cascade" }),
+  calories: integer("calories"),
+  protein: varchar("protein"), // grams
+  carbs: varchar("carbs"), // grams
+  fat: varchar("fat"), // grams
+  fiber: varchar("fiber"), // grams
+  sugar: varchar("sugar"), // grams
+  sodium: varchar("sodium"), // mg
+  cholesterol: varchar("cholesterol"), // mg
+  vitaminA: varchar("vitamin_a"), // % daily value
+  vitaminC: varchar("vitamin_c"), // % daily value
+  calcium: varchar("calcium"), // % daily value
+  iron: varchar("iron"), // % daily value
+  servings: integer("servings").notNull(),
+  calculatedAt: timestamp("calculated_at").defaultNow(),
+});
+
+// User Health Goals
+export const userHealthGoals = pgTable("user_health_goals", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  dailyCalories: integer("daily_calories"),
+  dailyProtein: varchar("daily_protein"),
+  dailyCarbs: varchar("daily_carbs"),
+  dailyFat: varchar("daily_fat"),
+  dailyFiber: varchar("daily_fiber"),
+  maxSodium: varchar("max_sodium"),
+  healthConditions: text("health_conditions").array(), // ["diabetes", "hypertension", etc.]
+  activityLevel: varchar("activity_level"), // sedentary, light, moderate, active, very-active
+  weightGoal: varchar("weight_goal"), // maintain, lose, gain
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Daily Nutrition Tracking
+export const dailyNutritionLog = pgTable("daily_nutrition_log", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  date: timestamp("date").notNull(),
+  recipeId: integer("recipe_id").references(() => recipes.id, { onDelete: "set null" }),
+  mealType: varchar("meal_type").notNull(), // breakfast, lunch, dinner, snack
+  servings: varchar("servings").notNull(),
+  calories: integer("calories").notNull(),
+  protein: varchar("protein").notNull(),
+  carbs: varchar("carbs").notNull(),
+  fat: varchar("fat").notNull(),
+  fiber: varchar("fiber"),
+  sodium: varchar("sodium"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
@@ -193,3 +303,63 @@ export type InsertPantryItem = z.infer<typeof insertPantryItemSchema>;
 export type PantryItem = typeof pantryItems.$inferSelect;
 export type InsertCookingHistory = z.infer<typeof insertCookingHistorySchema>;
 export type CookingHistory = typeof cookingHistory.$inferSelect;
+
+// New Schema Exports
+export const insertKitchenEquipmentSchema = createInsertSchema(kitchenEquipment).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertGroceryStoreSchema = createInsertSchema(groceryStores).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertIngredientPriceSchema = createInsertSchema(ingredientPrices).omit({
+  id: true,
+  createdAt: true,
+  lastUpdated: true,
+});
+
+export const insertRecipeCostSchema = createInsertSchema(recipeCosts).omit({
+  id: true,
+  calculatedAt: true,
+});
+
+export const insertNutritionDataSchema = createInsertSchema(nutritionData).omit({
+  id: true,
+  calculatedAt: true,
+});
+
+export const insertUserHealthGoalsSchema = createInsertSchema(userHealthGoals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertDailyNutritionLogSchema = createInsertSchema(dailyNutritionLog).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertKitchenEquipment = z.infer<typeof insertKitchenEquipmentSchema>;
+export type KitchenEquipment = typeof kitchenEquipment.$inferSelect;
+
+export type InsertGroceryStore = z.infer<typeof insertGroceryStoreSchema>;
+export type GroceryStore = typeof groceryStores.$inferSelect;
+
+export type InsertIngredientPrice = z.infer<typeof insertIngredientPriceSchema>;
+export type IngredientPrice = typeof ingredientPrices.$inferSelect;
+
+export type InsertRecipeCost = z.infer<typeof insertRecipeCostSchema>;
+export type RecipeCost = typeof recipeCosts.$inferSelect;
+
+export type InsertNutritionData = z.infer<typeof insertNutritionDataSchema>;
+export type NutritionData = typeof nutritionData.$inferSelect;
+
+export type InsertUserHealthGoals = z.infer<typeof insertUserHealthGoalsSchema>;
+export type UserHealthGoals = typeof userHealthGoals.$inferSelect;
+
+export type InsertDailyNutritionLog = z.infer<typeof insertDailyNutritionLogSchema>;
+export type DailyNutritionLog = typeof dailyNutritionLog.$inferSelect;

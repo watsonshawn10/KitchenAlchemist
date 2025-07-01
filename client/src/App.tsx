@@ -12,6 +12,10 @@ import Collections from "@/pages/collections";
 import ShoppingLists from "@/pages/shopping-lists";
 import Pantry from "@/pages/pantry";
 import Analytics from "@/pages/analytics";
+import Equipment from "@/pages/equipment";
+import Nutrition from "@/pages/nutrition";
+import Costs from "@/pages/costs";
+import Grocery from "@/pages/grocery";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +34,10 @@ function Router() {
           <Route path="/shopping-lists" component={ShoppingLists} />
           <Route path="/pantry" component={Pantry} />
           <Route path="/analytics" component={Analytics} />
+          <Route path="/equipment" component={Equipment} />
+          <Route path="/nutrition" component={Nutrition} />
+          <Route path="/costs" component={Costs} />
+          <Route path="/grocery" component={Grocery} />
         </>
       )}
       <Route component={NotFound} />
