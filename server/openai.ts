@@ -28,7 +28,9 @@ interface GeneratedRecipe {
 }
 
 export async function generateRecipes(ingredients: string[], dietaryRestrictions: string[] = []): Promise<GeneratedRecipe[]> {
+  console.log("OpenAI API Key present:", !!process.env.OPENAI_API_KEY);
   if (!openai) {
+    console.log("OpenAI client not initialized, using demo recipes");
     // Demo recipes when OpenAI API key is not available
     const dietaryNote = dietaryRestrictions.length > 0 ? ` (${dietaryRestrictions.join(", ")})` : "";
     const demoRecipes: GeneratedRecipe[] = [

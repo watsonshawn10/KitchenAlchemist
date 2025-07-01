@@ -52,12 +52,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Recipe generation endpoint
   app.post("/api/generate-recipes", isAuthenticated, async (req: any, res) => {
     try {
+      console.log("Starting recipe generation for user:", req.user.claims.sub);
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
       
       if (!user) {
+        console.log("User not found:", userId);
         return res.status(404).json({ message: "User not found" });
       }
+
+      console.log("User found:", user.email, "subscription:", user.subscriptionStatus);
 
       // Check usage limits for free users
       if (user.subscriptionStatus === "free") {
@@ -70,7 +74,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           currentCount = 0; // Reset count if it's a new month
         }
 
+        console.log("Free user usage check - current count:", currentCount, "months diff:", monthsDiff);
+
         if (currentCount >= 2) {
+          console.log("Usage limit reached for free user");
           return res.status(403).json({ 
             message: "Monthly recipe limit reached. Upgrade to Pro for unlimited recipes.",
             limitReached: true
@@ -79,9 +86,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { ingredients } = generateRecipesSchema.parse(req.body);
+      console.log("Generating recipes with ingredients:", ingredients, "dietary restrictions:", user.dietaryRestrictions);
       
       // Generate recipes using OpenAI with user's dietary restrictions
       const generatedRecipes = await generateRecipes(ingredients, user.dietaryRestrictions || []);
+      console.log("Successfully generated", generatedRecipes.length, "recipes");
       
       // Save recipes to database and increment usage
       const savedRecipes = [];
