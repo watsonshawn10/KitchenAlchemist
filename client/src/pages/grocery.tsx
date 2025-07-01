@@ -127,36 +127,6 @@ export default function Grocery() {
     {
       id: 1,
       storeId: 1,
-      storeName: "Kroger",
-      deliveryTime: "2-4 hours",
-      deliveryFee: "8.95",
-      minimumOrder: "35.00",
-      available: true,
-      estimatedDelivery: "Today by 5:00 PM"
-    },
-    {
-      id: 2,
-      storeId: 2,
-      storeName: "Publix",
-      deliveryTime: "1-3 hours",
-      deliveryFee: "9.99",
-      minimumOrder: "30.00",
-      available: true,
-      estimatedDelivery: "Today by 4:30 PM"
-    },
-    {
-      id: 3,
-      storeId: 3,
-      storeName: "Walmart",
-      deliveryTime: "Same day",
-      deliveryFee: "7.95",
-      minimumOrder: "35.00",
-      available: true,
-      estimatedDelivery: "Today by 6:30 PM"
-    },
-    {
-      id: 4,
-      storeId: 4,
       storeName: "Whole Foods Market",
       deliveryTime: "2-4 hours",
       deliveryFee: "9.95",
@@ -165,8 +135,8 @@ export default function Grocery() {
       estimatedDelivery: "Today by 6:00 PM"
     },
     {
-      id: 5,
-      storeId: 5,
+      id: 2,
+      storeId: 2,
       storeName: "Instacart (Safeway)",
       deliveryTime: "1-3 hours",
       deliveryFee: "7.99",
@@ -175,8 +145,8 @@ export default function Grocery() {
       estimatedDelivery: "Today by 4:00 PM"
     },
     {
-      id: 6,
-      storeId: 6,
+      id: 3,
+      storeId: 3,
       storeName: "Amazon Fresh",
       deliveryTime: "Same day",
       deliveryFee: "0.00",
@@ -189,33 +159,6 @@ export default function Grocery() {
   const mockDeals: Deal[] = currentDeals || [
     {
       id: 1,
-      ingredient: "Ground Turkey",
-      discount: "40%",
-      originalPrice: "7.99",
-      salePrice: "4.79",
-      store: "Kroger",
-      expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 2,
-      ingredient: "Fresh Strawberries",
-      discount: "35%",
-      originalPrice: "4.99",
-      salePrice: "3.24",
-      store: "Publix",
-      expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 3,
-      ingredient: "Whole Milk (Gallon)",
-      discount: "20%",
-      originalPrice: "3.98",
-      salePrice: "3.18",
-      store: "Walmart",
-      expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 4,
       ingredient: "Organic Chicken Breast",
       discount: "25%",
       originalPrice: "8.99",
@@ -224,7 +167,7 @@ export default function Grocery() {
       expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
-      id: 5,
+      id: 2,
       ingredient: "Avocados",
       discount: "30%",
       originalPrice: "2.49",
@@ -233,40 +176,13 @@ export default function Grocery() {
       expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
-      id: 6,
+      id: 3,
       ingredient: "Salmon Fillets",
       discount: "20%",
       originalPrice: "12.99",
       salePrice: "10.39",
       store: "Amazon Fresh",
       expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 7,
-      ingredient: "Baby Spinach",
-      discount: "45%",
-      originalPrice: "3.49",
-      salePrice: "1.92",
-      store: "Kroger",
-      expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 8,
-      ingredient: "Greek Yogurt",
-      discount: "25%",
-      originalPrice: "5.99",
-      salePrice: "4.49",
-      store: "Publix",
-      expiresAt: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
-    },
-    {
-      id: 9,
-      ingredient: "Bananas (3 lbs)",
-      discount: "30%",
-      originalPrice: "2.98",
-      salePrice: "2.08",
-      store: "Walmart",
-      expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString()
     }
   ];
 
@@ -274,38 +190,28 @@ export default function Grocery() {
     ingredients: selectedIngredients,
     stores: [
       {
-        storeName: "Kroger",
+        storeName: "Whole Foods Market",
         items: [
-          { name: "Ground Turkey", price: "4.79", quantity: "2 lbs" },
-          { name: "Baby Spinach", price: "1.92", quantity: "1 bag" }
+          { name: "Organic Chicken Breast", price: "6.74", quantity: "2 lbs" },
+          { name: "Fresh Broccoli", price: "3.49", quantity: "1 bunch" }
         ],
-        subtotal: "6.71",
-        deliveryFee: "8.95",
-        total: "15.66"
+        subtotal: "10.23",
+        deliveryFee: "9.95",
+        total: "20.18"
       },
       {
-        storeName: "Publix",
+        storeName: "Amazon Fresh",
         items: [
-          { name: "Fresh Strawberries", price: "3.24", quantity: "1 lb" },
-          { name: "Greek Yogurt", price: "4.49", quantity: "1 container" }
+          { name: "Salmon Fillets", price: "10.39", quantity: "1 lb" },
+          { name: "Rice", price: "4.99", quantity: "2 lbs" }
         ],
-        subtotal: "7.73",
-        deliveryFee: "9.99",
-        total: "17.72"
-      },
-      {
-        storeName: "Walmart",
-        items: [
-          { name: "Whole Milk (Gallon)", price: "3.18", quantity: "1 gallon" },
-          { name: "Bananas", price: "2.08", quantity: "3 lbs" }
-        ],
-        subtotal: "5.26",
-        deliveryFee: "7.95",
-        total: "13.21"
+        subtotal: "15.38",
+        deliveryFee: "0.00",
+        total: "15.38"
       }
     ],
-    totalCost: "46.59",
-    estimatedSavings: "18.42"
+    totalCost: "35.56",
+    estimatedSavings: "12.44"
   };
 
   return (
