@@ -300,55 +300,284 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        {/* Smart Kitchen Features Grid */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Smart Kitchen Features
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link href="/equipment">
-              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 hover:border-primary">
-                <CardContent className="p-6 text-center">
-                  <Zap className="h-12 w-12 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                  <h3 className="font-semibold text-gray-900 mb-2">Smart Equipment</h3>
-                  <p className="text-sm text-gray-600">Manage kitchen appliances and smart devices</p>
-                  <ArrowRight className="h-4 w-4 text-primary mx-auto mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* Complete Platform Overview */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Complete Smart Kitchen Platform
+            </h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              Transform your cooking experience with 8 comprehensive features covering every aspect of modern kitchen management
+            </p>
+          </div>
+
+          {/* Core AI Features */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">🤖 AI-Powered Core Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-orange-200">
+                <CardContent className="p-6">
+                  <div className="flex items-start space-x-4">
+                    <Sparkles className="h-8 w-8 text-orange-600 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">AI Recipe Generation</h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Generate personalized recipes from available ingredients with dietary restrictions support
+                      </p>
+                      <ul className="text-xs text-gray-500 space-y-1">
+                        <li>• 11 dietary preference options (vegetarian, vegan, keto, etc.)</li>
+                        <li>• Step-by-step cooking instructions</li>
+                        <li>• Ingredient substitution suggestions</li>
+                        <li>• Nutrition analysis integration</li>
+                      </ul>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            </Link>
 
-            <Link href="/nutrition">
-              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 hover:border-primary">
-                <CardContent className="p-6 text-center">
-                  <Heart className="h-12 w-12 text-red-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                  <h3 className="font-semibold text-gray-900 mb-2">Health Tracking</h3>
-                  <p className="text-sm text-gray-600">Monitor nutrition and wellness goals</p>
-                  <ArrowRight className="h-4 w-4 text-primary mx-auto mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </CardContent>
-              </Card>
-            </Link>
+              <Link href="/collections">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <Package className="h-8 w-8 text-blue-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Recipe Collections</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Organize and categorize your favorite recipes into custom collections
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Create themed collections (breakfast, dinner, etc.)</li>
+                          <li>• Tag and search functionality</li>
+                          <li>• Share collections with family</li>
+                          <li>• Recipe rating and review system</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-blue-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
 
-            <Link href="/costs">
-              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 hover:border-primary">
-                <CardContent className="p-6 text-center">
-                  <DollarSign className="h-12 w-12 text-green-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                  <h3 className="font-semibold text-gray-900 mb-2">Cost Management</h3>
-                  <p className="text-sm text-gray-600">Track spending and optimize your budget</p>
-                  <ArrowRight className="h-4 w-4 text-primary mx-auto mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </CardContent>
-              </Card>
-            </Link>
+          {/* Kitchen Management */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">🏠 Kitchen Management Suite</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/pantry">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <Package className="h-8 w-8 text-purple-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Smart Pantry</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Track ingredients with expiration alerts and categorization
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Expiration date tracking</li>
+                          <li>• Automatic categorization</li>
+                          <li>• Low stock notifications</li>
+                          <li>• Inventory optimization</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-purple-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
 
+              <Link href="/shopping-lists">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <ShoppingCart className="h-8 w-8 text-green-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Shopping Lists</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Auto-generate and manage shopping lists from recipes
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Recipe-to-list automation</li>
+                          <li>• Store aisle organization</li>
+                          <li>• Price comparison integration</li>
+                          <li>• Shared family lists</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-green-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/equipment">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <Zap className="h-8 w-8 text-cyan-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Smart Equipment</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Manage kitchen appliances and smart device connectivity
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• WiFi device integration</li>
+                          <li>• Usage analytics</li>
+                          <li>• Maintenance scheduling</li>
+                          <li>• Recipe-appliance matching</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-cyan-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
+
+          {/* Advanced Intelligence */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">📊 Advanced Intelligence & Optimization</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/nutrition">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-red-50 to-pink-50 border-red-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <Heart className="h-8 w-8 text-red-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Health & Nutrition</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Monitor nutrition goals and daily intake with detailed analytics
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Macro/micro nutrient tracking</li>
+                          <li>• Custom health goals</li>
+                          <li>• Meal planning optimization</li>
+                          <li>• Nutritional recommendations</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-red-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/costs">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <DollarSign className="h-8 w-8 text-yellow-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Cost Management</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Track recipe costs and ingredient pricing for budget optimization
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Recipe cost calculation</li>
+                          <li>• Budget tracking & alerts</li>
+                          <li>• Price trend analysis</li>
+                          <li>• Savings opportunities</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-yellow-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/analytics">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <TrendingUp className="h-8 w-8 text-indigo-600 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Cooking Analytics</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Track cooking patterns and view detailed performance insights
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Cooking frequency analysis</li>
+                          <li>• Recipe success rates</li>
+                          <li>• Cuisine preferences</li>
+                          <li>• Progress tracking</li>
+                        </ul>
+                        <ArrowRight className="h-4 w-4 text-indigo-600 mt-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
+
+          {/* Smart Shopping & Delivery */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">🛒 Smart Shopping & Delivery</h3>
             <Link href="/grocery">
-              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-2 hover:border-primary">
-                <CardContent className="p-6 text-center">
-                  <Truck className="h-12 w-12 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                  <h3 className="font-semibold text-gray-900 mb-2">Smart Grocery</h3>
-                  <p className="text-sm text-gray-600">Optimize orders and delivery scheduling</p>
-                  <ArrowRight className="h-4 w-4 text-primary mx-auto mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
+                <CardContent className="p-8">
+                  <div className="flex items-start space-x-6">
+                    <Truck className="h-12 w-12 text-teal-600 mt-1" />
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-3 text-lg">Smart Grocery & Delivery Integration</h4>
+                      <p className="text-gray-600 mb-4">
+                        Optimize grocery orders across multiple stores with intelligent delivery scheduling and price comparison
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ul className="text-sm text-gray-500 space-y-2">
+                          <li>• Multi-store price comparison</li>
+                          <li>• Delivery time optimization</li>
+                          <li>• Bulk purchase recommendations</li>
+                          <li>• Seasonal produce alerts</li>
+                        </ul>
+                        <ul className="text-sm text-gray-500 space-y-2">
+                          <li>• Store loyalty integration</li>
+                          <li>• Deal and coupon matching</li>
+                          <li>• Delivery route optimization</li>
+                          <li>• Automatic reordering</li>
+                        </ul>
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-teal-600 mt-4" />
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </Link>
+          </div>
+
+          {/* Platform Benefits */}
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-8 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose ChefAI Platform?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div>
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Sparkles className="h-8 w-8 text-blue-600" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">AI-Powered</h4>
+                <p className="text-sm text-gray-600">Advanced AI generates personalized recipes and recommendations</p>
+              </div>
+              <div>
+                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Target className="h-8 w-8 text-green-600" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">All-in-One</h4>
+                <p className="text-sm text-gray-600">Complete kitchen management in a single integrated platform</p>
+              </div>
+              <div>
+                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Activity className="h-8 w-8 text-purple-600" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">Smart Analytics</h4>
+                <p className="text-sm text-gray-600">Data-driven insights to optimize your cooking and spending</p>
+              </div>
+              <div>
+                <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Users className="h-8 w-8 text-orange-600" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">Family-Friendly</h4>
+                <p className="text-sm text-gray-600">Designed for households with sharing and collaboration features</p>
+              </div>
+            </div>
           </div>
         </div>
 
