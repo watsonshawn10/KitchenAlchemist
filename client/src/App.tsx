@@ -16,6 +16,7 @@ import Equipment from "@/pages/equipment";
 import Nutrition from "@/pages/nutrition";
 import Costs from "@/pages/costs";
 import Grocery from "@/pages/grocery";
+import BudgetMealPlanner from "@/pages/budget-meal-planner";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/nutrition" component={Nutrition} />
           <Route path="/costs" component={Costs} />
           <Route path="/grocery" component={Grocery} />
+          <Route path="/budget-meal-planner" component={BudgetMealPlanner} />
         </>
       )}
       <Route component={NotFound} />

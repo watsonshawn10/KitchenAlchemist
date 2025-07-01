@@ -242,6 +242,65 @@ export const dailyNutritionLog = pgTable("daily_nutrition_log", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Meal Plans
+export const mealPlans = pgTable("meal_plans", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  weekStartDate: timestamp("week_start_date").notNull(), // Monday of the planning week
+  totalBudget: varchar("total_budget").notNull(), // weekly budget in dollars
+  actualCost: varchar("actual_cost").default("0.00"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Planned Meals
+export const plannedMeals = pgTable("planned_meals", {
+  id: serial("id").primaryKey(),
+  mealPlanId: integer("meal_plan_id").notNull().references(() => mealPlans.id, { onDelete: "cascade" }),
+  recipeId: integer("recipe_id").references(() => recipes.id, { onDelete: "set null" }),
+  mealType: varchar("meal_type").notNull(), // breakfast, lunch, dinner, snack
+  scheduledDate: timestamp("scheduled_date").notNull(),
+  servings: integer("servings").notNull().default(1),
+  estimatedCost: varchar("estimated_cost").default("0.00"),
+  actualCost: varchar("actual_cost"),
+  isCooked: boolean("is_cooked").default(false),
+  rating: integer("rating"), // user rating after cooking
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Budget Preferences
+export const budgetPreferences = pgTable("budget_preferences", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  weeklyBudget: varchar("weekly_budget").notNull(),
+  maxMealCost: varchar("max_meal_cost"), // maximum cost per meal
+  priorityIngredients: text("priority_ingredients").array(), // ingredients user prefers to buy organic/premium
+  avoidExpensiveItems: boolean("avoid_expensive_items").default(false),
+  preferStoreBrands: boolean("prefer_store_brands").default(false),
+  bulkBuyingEnabled: boolean("bulk_buying_enabled").default(true),
+  seasonalPriorityEnabled: boolean("seasonal_priority_enabled").default(true), // prefer seasonal ingredients
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Smart Substitutions (for budget optimization)
+export const smartSubstitutions = pgTable("smart_substitutions", {
+  id: serial("id").primaryKey(),
+  originalIngredient: varchar("original_ingredient").notNull(),
+  substituteIngredient: varchar("substitute_ingredient").notNull(),
+  costSavingsPercent: integer("cost_savings_percent"), // percentage saved
+  nutritionImpact: varchar("nutrition_impact"), // better, same, slight-loss, significant-loss
+  tasteImpact: varchar("taste_impact"), // same, slight-change, different
+  dietaryRestrictions: text("dietary_restrictions").array(), // which restrictions this substitution supports
+  season: varchar("season"), // when this substitution is most cost-effective
+  isVerified: boolean("is_verified").default(false), // community or chef verified
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
@@ -343,6 +402,33 @@ export const insertDailyNutritionLogSchema = createInsertSchema(dailyNutritionLo
   createdAt: true,
 });
 
+export const insertMealPlanSchema = createInsertSchema(mealPlans).omit({
+  id: true,
+  actualCost: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPlannedMealSchema = createInsertSchema(plannedMeals).omit({
+  id: true,
+  actualCost: true,
+  isCooked: true,
+  rating: true,
+  createdAt: true,
+});
+
+export const insertBudgetPreferencesSchema = createInsertSchema(budgetPreferences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSmartSubstitutionSchema = createInsertSchema(smartSubstitutions).omit({
+  id: true,
+  isVerified: true,
+  createdAt: true,
+});
+
 export type InsertKitchenEquipment = z.infer<typeof insertKitchenEquipmentSchema>;
 export type KitchenEquipment = typeof kitchenEquipment.$inferSelect;
 
@@ -363,3 +449,15 @@ export type UserHealthGoals = typeof userHealthGoals.$inferSelect;
 
 export type InsertDailyNutritionLog = z.infer<typeof insertDailyNutritionLogSchema>;
 export type DailyNutritionLog = typeof dailyNutritionLog.$inferSelect;
+
+export type InsertMealPlan = z.infer<typeof insertMealPlanSchema>;
+export type MealPlan = typeof mealPlans.$inferSelect;
+
+export type InsertPlannedMeal = z.infer<typeof insertPlannedMealSchema>;
+export type PlannedMeal = typeof plannedMeals.$inferSelect;
+
+export type InsertBudgetPreferences = z.infer<typeof insertBudgetPreferencesSchema>;
+export type BudgetPreferences = typeof budgetPreferences.$inferSelect;
+
+export type InsertSmartSubstitution = z.infer<typeof insertSmartSubstitutionSchema>;
+export type SmartSubstitution = typeof smartSubstitutions.$inferSelect;

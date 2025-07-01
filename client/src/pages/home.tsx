@@ -438,6 +438,42 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Budget Planning Features */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">💰 Budget-Friendly Meal Planning</h3>
+            <div className="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
+              <Link href="/budget-meal-planner">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                  <CardContent className="p-8">
+                    <div className="flex items-start space-x-6">
+                      <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center">
+                        <div className="text-2xl">🎯</div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-semibold text-gray-900 mb-3">Personalized Budget Meal Planner</h4>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Create AI-powered weekly meal plans that fit your budget and dietary preferences with smart ingredient substitutions
+                        </p>
+                        <div className="grid grid-cols-2 gap-4 text-xs text-gray-500">
+                          <ul className="space-y-1">
+                            <li>• Weekly budget optimization</li>
+                            <li>• Smart ingredient substitutions</li>
+                            <li>• Dietary restriction support</li>
+                          </ul>
+                          <ul className="space-y-1">
+                            <li>• Cost-per-meal tracking</li>
+                            <li>• Seasonal ingredient priorities</li>
+                            <li>• Bulk buying recommendations</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
+
           {/* Benefits Summary */}
           <div className="bg-gradient-to-r from-primary/10 to-orange-100 rounded-2xl p-8">
             <div className="text-center">

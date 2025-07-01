@@ -604,6 +604,166 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Meal Planning routes
+  app.get('/api/meal-plans', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const mealPlans = await storage.getUserMealPlans(userId);
+      res.json(mealPlans);
+    } catch (error) {
+      console.error("Error fetching meal plans:", error);
+      res.status(500).json({ message: "Failed to fetch meal plans" });
+    }
+  });
+
+  app.post('/api/meal-plans', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const mealPlan = await storage.createMealPlan({
+        ...req.body,
+        userId,
+      });
+      res.json(mealPlan);
+    } catch (error) {
+      console.error("Error creating meal plan:", error);
+      res.status(500).json({ message: "Failed to create meal plan" });
+    }
+  });
+
+  app.get('/api/meal-plans/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const mealPlan = await storage.getMealPlan(parseInt(req.params.id));
+      if (!mealPlan) {
+        return res.status(404).json({ message: "Meal plan not found" });
+      }
+      res.json(mealPlan);
+    } catch (error) {
+      console.error("Error fetching meal plan:", error);
+      res.status(500).json({ message: "Failed to fetch meal plan" });
+    }
+  });
+
+  app.put('/api/meal-plans/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const mealPlan = await storage.updateMealPlan(parseInt(req.params.id), req.body);
+      res.json(mealPlan);
+    } catch (error) {
+      console.error("Error updating meal plan:", error);
+      res.status(500).json({ message: "Failed to update meal plan" });
+    }
+  });
+
+  app.delete('/api/meal-plans/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteMealPlan(parseInt(req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting meal plan:", error);
+      res.status(500).json({ message: "Failed to delete meal plan" });
+    }
+  });
+
+  app.get('/api/meal-plans/:id/meals', isAuthenticated, async (req: any, res) => {
+    try {
+      const plannedMeals = await storage.getPlannedMeals(parseInt(req.params.id));
+      res.json(plannedMeals);
+    } catch (error) {
+      console.error("Error fetching planned meals:", error);
+      res.status(500).json({ message: "Failed to fetch planned meals" });
+    }
+  });
+
+  app.post('/api/meal-plans/:id/meals', isAuthenticated, async (req: any, res) => {
+    try {
+      const plannedMeal = await storage.createPlannedMeal({
+        ...req.body,
+        mealPlanId: parseInt(req.params.id),
+      });
+      res.json(plannedMeal);
+    } catch (error) {
+      console.error("Error creating planned meal:", error);
+      res.status(500).json({ message: "Failed to create planned meal" });
+    }
+  });
+
+  // Budget Preferences routes
+  app.get('/api/budget-preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.getUserBudgetPreferences(userId);
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error fetching budget preferences:", error);
+      res.status(500).json({ message: "Failed to fetch budget preferences" });
+    }
+  });
+
+  app.post('/api/budget-preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const preferences = await storage.createBudgetPreferences({
+        ...req.body,
+        userId,
+      });
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error creating budget preferences:", error);
+      res.status(500).json({ message: "Failed to create budget preferences" });
+    }
+  });
+
+  // Generate Budget-Friendly Meal Plan
+  app.post('/api/generate-budget-meal-plan', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { weeklyBudget, dietaryRestrictions } = req.body;
+      
+      if (!weeklyBudget || weeklyBudget <= 0) {
+        return res.status(400).json({ message: "Valid weekly budget is required" });
+      }
+
+      const result = await storage.generateBudgetFriendlyMealPlan(
+        userId,
+        parseFloat(weeklyBudget),
+        dietaryRestrictions || []
+      );
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error generating budget meal plan:", error);
+      res.status(500).json({ message: "Failed to generate budget meal plan" });
+    }
+  });
+
+  // Optimize Meal Plan Costs
+  app.post('/api/meal-plans/:id/optimize', isAuthenticated, async (req: any, res) => {
+    try {
+      const result = await storage.optimizeMealPlanCosts(parseInt(req.params.id));
+      res.json(result);
+    } catch (error) {
+      console.error("Error optimizing meal plan:", error);
+      res.status(500).json({ message: "Failed to optimize meal plan" });
+    }
+  });
+
+  // Smart Substitutions routes
+  app.get('/api/substitutions/:ingredient', isAuthenticated, async (req: any, res) => {
+    try {
+      const { ingredient } = req.params;
+      const { dietaryRestrictions } = req.query;
+      
+      const restrictions = typeof dietaryRestrictions === 'string' 
+        ? dietaryRestrictions.split(',') 
+        : [];
+      
+      const substitutions = await storage.getSmartSubstitutions(ingredient, restrictions);
+      res.json(substitutions);
+    } catch (error) {
+      console.error("Error fetching smart substitutions:", error);
+      res.status(500).json({ message: "Failed to fetch smart substitutions" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
