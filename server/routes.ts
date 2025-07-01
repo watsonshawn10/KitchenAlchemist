@@ -31,6 +31,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update dietary restrictions
+  app.put('/api/user/dietary-restrictions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { restrictions } = req.body;
+      
+      if (!Array.isArray(restrictions)) {
+        return res.status(400).json({ message: "Restrictions must be an array" });
+      }
+
+      const user = await storage.updateDietaryRestrictions(userId, restrictions);
+      res.json(user);
+    } catch (error) {
+      console.error("Error updating dietary restrictions:", error);
+      res.status(500).json({ message: "Failed to update dietary restrictions" });
+    }
+  });
+
   // Recipe generation endpoint
   app.post("/api/generate-recipes", isAuthenticated, async (req: any, res) => {
     try {
@@ -62,8 +80,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { ingredients } = generateRecipesSchema.parse(req.body);
       
-      // Generate recipes using OpenAI
-      const generatedRecipes = await generateRecipes(ingredients);
+      // Generate recipes using OpenAI with user's dietary restrictions
+      const generatedRecipes = await generateRecipes(ingredients, user.dietaryRestrictions || []);
       
       // Save recipes to database and increment usage
       const savedRecipes = [];

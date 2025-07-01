@@ -37,8 +37,9 @@ ChefAI is a full-stack web application that generates personalized recipes using
 ### Recipe Generation Engine
 - **AI Provider**: OpenAI GPT integration
 - **Input Processing**: Ingredient validation and normalization
+- **Dietary Restrictions**: 11 dietary preference options (vegetarian, vegan, gluten-free, etc.)
 - **Output Formatting**: Structured recipe data with ingredients, instructions, and metadata
-- **Usage Limits**: Tier-based monthly limits (free: 2 recipes, pro: 50, premium: unlimited)
+- **Usage Limits**: Tier-based monthly limits (free: 2 recipes, pro: unlimited, premium: unlimited)
 
 ### Payment Processing
 - **Provider**: Stripe integration with React Stripe.js

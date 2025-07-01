@@ -27,13 +27,14 @@ interface GeneratedRecipe {
   rating: number;
 }
 
-export async function generateRecipes(ingredients: string[]): Promise<GeneratedRecipe[]> {
+export async function generateRecipes(ingredients: string[], dietaryRestrictions: string[] = []): Promise<GeneratedRecipe[]> {
   if (!openai) {
     // Demo recipes when OpenAI API key is not available
+    const dietaryNote = dietaryRestrictions.length > 0 ? ` (${dietaryRestrictions.join(", ")})` : "";
     const demoRecipes: GeneratedRecipe[] = [
       {
-        title: `${ingredients[0] || "Herb"} Delight Bowl`,
-        description: `A fresh and flavorful bowl featuring ${ingredients.slice(0, 3).join(", ")} with aromatic herbs and seasonings.`,
+        title: `${ingredients[0] || "Herb"} Delight Bowl${dietaryNote}`,
+        description: `A fresh and flavorful ${dietaryRestrictions.includes("vegan") ? "vegan " : ""}bowl featuring ${ingredients.slice(0, 3).join(", ")} with aromatic herbs and seasonings.`,
         ingredients: [
           { name: ingredients[0] || "Main ingredient", amount: "2", unit: "cups" },
           { name: ingredients[1] || "Secondary ingredient", amount: "1", unit: "cup" },
@@ -108,10 +109,11 @@ export async function generateRecipes(ingredients: string[]): Promise<GeneratedR
   }
 
   try {
+    const dietaryNote = dietaryRestrictions.length > 0 ? `\n\nDietary restrictions to follow: ${dietaryRestrictions.join(", ")}` : "";
     const prompt = `
 You are a professional chef and recipe creator. Given the following ingredients, create 3 unique and delicious recipes.
 
-Ingredients available: ${ingredients.join(", ")}
+Ingredients available: ${ingredients.join(", ")}${dietaryNote}
 
 Please provide 3 different recipes that use these ingredients. Each recipe should be practical, delicious, and achievable for home cooks.
 

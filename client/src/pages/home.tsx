@@ -124,6 +124,7 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#home" className="text-gray-700 hover:text-primary transition-colors">Home</a>
               <a href="#recipes" className="text-gray-700 hover:text-primary transition-colors">My Recipes</a>
+              <Link href="/settings" className="text-gray-700 hover:text-primary transition-colors">Settings</Link>
               <a href="#pricing" className="text-gray-700 hover:text-primary transition-colors">Pricing</a>
             </div>
             <div className="flex items-center space-x-4">

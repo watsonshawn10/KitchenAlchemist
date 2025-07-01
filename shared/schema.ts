@@ -35,6 +35,7 @@ export const users = pgTable("users", {
   subscriptionStatus: varchar("subscription_status").default("free"), // free, pro, premium
   monthlyRecipeCount: integer("monthly_recipe_count").default(0),
   lastResetDate: timestamp("last_reset_date").defaultNow(),
+  dietaryRestrictions: text("dietary_restrictions").array().default([]), // array of dietary restrictions
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

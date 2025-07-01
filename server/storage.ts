@@ -20,6 +20,7 @@ export interface IStorage {
   updateSubscriptionStatus(userId: string, status: string): Promise<User>;
   resetMonthlyUsage(userId: string): Promise<User>;
   incrementRecipeCount(userId: string): Promise<User>;
+  updateDietaryRestrictions(userId: string, restrictions: string[]): Promise<User>;
   
   // Recipe operations
   createRecipe(recipe: InsertRecipe): Promise<Recipe>;
@@ -123,6 +124,18 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return updatedUser;
+  }
+
+  async updateDietaryRestrictions(userId: string, restrictions: string[]): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        dietaryRestrictions: restrictions,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
   }
 
   // Recipe operations

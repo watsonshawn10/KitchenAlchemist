@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, X, Sparkles } from "lucide-react";
+import { Plus, X, Sparkles, Settings } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Link } from "wouter";
 
 interface IngredientInputProps {
   selectedIngredients: string[];
@@ -20,6 +22,7 @@ export default function IngredientInput({
   isGenerating,
   remainingRecipes 
 }: IngredientInputProps) {
+  const { user } = useAuth();
   const [currentIngredient, setCurrentIngredient] = useState("");
 
   const handleAddIngredient = () => {
@@ -117,6 +120,37 @@ export default function IngredientInput({
                 </Badge>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Dietary Restrictions Display */}
+        {user?.dietaryRestrictions && user.dietaryRestrictions.length > 0 && (
+          <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-green-900 mb-2">Active Dietary Preferences:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {user.dietaryRestrictions.slice(0, 4).map((restriction: string) => (
+                    <Badge key={restriction} className="bg-green-100 text-green-800 border-green-300 text-xs">
+                      {restriction.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </Badge>
+                  ))}
+                  {user.dietaryRestrictions.length > 4 && (
+                    <Badge variant="outline" className="text-xs border-green-300">
+                      +{user.dietaryRestrictions.length - 4} more
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <Link href="/settings">
+                <Button variant="ghost" size="sm" className="text-green-700 hover:text-green-900">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+            <p className="text-xs text-green-700 mt-2">
+              AI will generate recipes that match your dietary preferences automatically.
+            </p>
           </div>
         )}
 
