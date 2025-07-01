@@ -198,32 +198,80 @@ export default function Grocery() {
   console.log("Delivery options being used:", mockDeliveryOptions);
 
   const mockDeals: Deal[] = currentDeals || [
+    // Whole Foods Current Tuesday Deals (valid through Aug 26, 2025)
     {
       id: 1,
-      ingredient: "Organic Chicken Breast",
+      ingredient: "Rotisserie Chicken",
       discount: "25%",
-      originalPrice: "8.99",
-      salePrice: "6.74",
+      originalPrice: "7.99",
+      salePrice: "5.99",
       store: "Whole Foods",
-      expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
+      expiresAt: new Date("2025-08-26").toISOString()
     },
     {
       id: 2,
-      ingredient: "Avocados",
-      discount: "30%",
-      originalPrice: "2.49",
-      salePrice: "1.74",
-      store: "Safeway",
-      expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString()
+      ingredient: "365 Ground Beef 80% Lean",
+      discount: "50%",
+      originalPrice: "6.99",
+      salePrice: "3.50",
+      store: "Whole Foods",
+      expiresAt: new Date("2025-08-26").toISOString()
     },
+    
+    // Kroger Weekly Deals (Jan 22-28, 2025)
     {
       id: 3,
-      ingredient: "Salmon Fillets",
-      discount: "20%",
+      ingredient: "Fresh Blueberries (Pint)",
+      discount: "40%",
+      originalPrice: "2.99",
+      salePrice: "1.78",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
+    },
+    {
+      id: 4,
+      ingredient: "Hass Avocados",
+      discount: "47%",
+      originalPrice: "1.29",
+      salePrice: "0.69",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
+    },
+    {
+      id: 5,
+      ingredient: "Fresh Ground Beef",
+      discount: "62%",
+      originalPrice: "4.99",
+      salePrice: "1.88",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
+    },
+    {
+      id: 6,
+      ingredient: "Fresh Atlantic Salmon Fillets",
+      discount: "46%",
       originalPrice: "12.99",
-      salePrice: "10.39",
-      store: "Amazon Fresh",
-      expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+      salePrice: "6.99",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
+    },
+    {
+      id: 7,
+      ingredient: "Simply Orange Juice 52oz",
+      discount: "37%",
+      originalPrice: "3.99",
+      salePrice: "2.50",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
+    },
+    {
+      id: 8,
+      ingredient: "Center-Cut Pork Chops",
+      discount: "17%",
+      originalPrice: "2.99",
+      salePrice: "2.49",
+      store: "Kroger",
+      expiresAt: new Date("2025-01-28").toISOString()
     }
   ];
 
@@ -472,6 +520,32 @@ export default function Grocery() {
                           {option.estimatedDelivery}
                         </div>
                       </div>
+
+                      {/* Current Promotions */}
+                      {option.storeName === "Instacart" && (
+                        <div className="pt-2 border-t bg-yellow-50 p-2 rounded">
+                          <div className="text-xs font-medium text-yellow-800">Current Promo:</div>
+                          <div className="text-xs text-yellow-700">$10 off first order (Code: A076571)</div>
+                        </div>
+                      )}
+                      {option.storeName === "DoorDash" && (
+                        <div className="pt-2 border-t bg-green-50 p-2 rounded">
+                          <div className="text-xs font-medium text-green-800">New User Special:</div>
+                          <div className="text-xs text-green-700">50% off first order + free delivery</div>
+                        </div>
+                      )}
+                      {option.storeName === "Uber Eats" && (
+                        <div className="pt-2 border-t bg-blue-50 p-2 rounded">
+                          <div className="text-xs font-medium text-blue-800">Limited Time:</div>
+                          <div className="text-xs text-blue-700">$15 off orders $20+ (new users)</div>
+                        </div>
+                      )}
+                      {option.storeName === "Kroger Fresh" && (
+                        <div className="pt-2 border-t bg-purple-50 p-2 rounded">
+                          <div className="text-xs font-medium text-purple-800">Weekly Special:</div>
+                          <div className="text-xs text-purple-700">Free delivery on $35+ orders</div>
+                        </div>
+                      )}
 
                       <Button 
                         className="w-full" 
