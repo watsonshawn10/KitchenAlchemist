@@ -62,12 +62,12 @@ export default function Grocery() {
 
   const { data: deliveryOptions } = useQuery({
     queryKey: ["/api/delivery-options"],
-    enabled: !!user,
+    enabled: false, // Disabled to use mock data
   });
 
   const { data: currentDeals } = useQuery({
     queryKey: ["/api/current-deals"],
-    enabled: !!user,
+    enabled: false, // Disabled to use mock data
   });
 
   const { data: shoppingLists } = useQuery({
@@ -124,7 +124,7 @@ export default function Grocery() {
   };
 
   // Mock data when API isn't available
-  const mockDeliveryOptions: DeliveryOption[] = deliveryOptions || [
+  const mockDeliveryOptions: DeliveryOption[] = (Array.isArray(deliveryOptions) && deliveryOptions.length > 0) ? deliveryOptions : [
     {
       id: 1,
       storeId: 1,
