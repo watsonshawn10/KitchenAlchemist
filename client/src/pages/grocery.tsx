@@ -60,6 +60,8 @@ export default function Grocery() {
   const [newIngredient, setNewIngredient] = useState("");
   const [isOptimizeDialogOpen, setIsOptimizeDialogOpen] = useState(false);
 
+  console.log("Grocery page loaded, user:", user);
+
   const { data: deliveryOptions } = useQuery({
     queryKey: ["/api/delivery-options"],
     enabled: false, // Disabled to use mock data
@@ -192,6 +194,8 @@ export default function Grocery() {
       website: "https://www.ubereats.com"
     }
   ];
+
+  console.log("Delivery options being used:", mockDeliveryOptions);
 
   const mockDeals: Deal[] = currentDeals || [
     {
