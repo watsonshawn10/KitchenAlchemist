@@ -8,6 +8,10 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import Subscribe from "@/pages/subscribe";
 import Settings from "@/pages/settings";
+import Collections from "@/pages/collections";
+import ShoppingLists from "@/pages/shopping-lists";
+import Pantry from "@/pages/pantry";
+import Analytics from "@/pages/analytics";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +26,10 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/subscribe" component={Subscribe} />
           <Route path="/settings" component={Settings} />
+          <Route path="/collections" component={Collections} />
+          <Route path="/shopping-lists" component={ShoppingLists} />
+          <Route path="/pantry" component={Pantry} />
+          <Route path="/analytics" component={Analytics} />
         </>
       )}
       <Route component={NotFound} />

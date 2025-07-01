@@ -126,6 +126,12 @@ ChefAI is a full-stack web application that generates personalized recipes using
 ```
 Changelog:
 - July 01, 2025. Initial setup
+- July 01, 2025. Added comprehensive dietary restrictions functionality with 11 preference options
+- July 01, 2025. Implemented four major features:
+  * Recipe Collections & Organization - Create and manage custom recipe collections
+  * Shopping List Generation - Auto-generate and manage shopping lists from recipes
+  * Pantry Management - Track ingredients with expiration alerts and categorization
+  * Cooking History & Analytics - Track cooking patterns and view detailed analytics
 ```
 
 ## User Preferences

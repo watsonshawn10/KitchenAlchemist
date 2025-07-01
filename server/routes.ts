@@ -292,6 +292,309 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ received: true });
   });
 
+  // RECIPE COLLECTIONS API
+  app.get('/api/collections', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const collections = await storage.getUserCollections(userId);
+      res.json(collections);
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      res.status(500).json({ message: "Failed to fetch collections" });
+    }
+  });
+
+  app.post('/api/collections', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const collection = await storage.createCollection({
+        ...req.body,
+        userId,
+      });
+      res.json(collection);
+    } catch (error) {
+      console.error("Error creating collection:", error);
+      res.status(500).json({ message: "Failed to create collection" });
+    }
+  });
+
+  app.put('/api/collections/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const collection = await storage.updateCollection(
+        parseInt(req.params.id),
+        req.body
+      );
+      res.json(collection);
+    } catch (error) {
+      console.error("Error updating collection:", error);
+      res.status(500).json({ message: "Failed to update collection" });
+    }
+  });
+
+  app.delete('/api/collections/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteCollection(parseInt(req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting collection:", error);
+      res.status(500).json({ message: "Failed to delete collection" });
+    }
+  });
+
+  app.post('/api/collections/:id/recipes/:recipeId', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.addRecipeToCollection(
+        parseInt(req.params.id),
+        parseInt(req.params.recipeId)
+      );
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error adding recipe to collection:", error);
+      res.status(500).json({ message: "Failed to add recipe to collection" });
+    }
+  });
+
+  app.delete('/api/collections/:id/recipes/:recipeId', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.removeRecipeFromCollection(
+        parseInt(req.params.id),
+        parseInt(req.params.recipeId)
+      );
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error removing recipe from collection:", error);
+      res.status(500).json({ message: "Failed to remove recipe from collection" });
+    }
+  });
+
+  app.get('/api/collections/:id/recipes', isAuthenticated, async (req: any, res) => {
+    try {
+      const recipes = await storage.getCollectionRecipes(parseInt(req.params.id));
+      res.json(recipes);
+    } catch (error) {
+      console.error("Error fetching collection recipes:", error);
+      res.status(500).json({ message: "Failed to fetch collection recipes" });
+    }
+  });
+
+  // SHOPPING LISTS API
+  app.get('/api/shopping-lists', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const lists = await storage.getUserShoppingLists(userId);
+      res.json(lists);
+    } catch (error) {
+      console.error("Error fetching shopping lists:", error);
+      res.status(500).json({ message: "Failed to fetch shopping lists" });
+    }
+  });
+
+  app.post('/api/shopping-lists', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const list = await storage.createShoppingList({
+        ...req.body,
+        userId,
+      });
+      res.json(list);
+    } catch (error) {
+      console.error("Error creating shopping list:", error);
+      res.status(500).json({ message: "Failed to create shopping list" });
+    }
+  });
+
+  app.put('/api/shopping-lists/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const list = await storage.updateShoppingList(
+        parseInt(req.params.id),
+        req.body
+      );
+      res.json(list);
+    } catch (error) {
+      console.error("Error updating shopping list:", error);
+      res.status(500).json({ message: "Failed to update shopping list" });
+    }
+  });
+
+  app.delete('/api/shopping-lists/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteShoppingList(parseInt(req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting shopping list:", error);
+      res.status(500).json({ message: "Failed to delete shopping list" });
+    }
+  });
+
+  app.get('/api/shopping-lists/:id/items', isAuthenticated, async (req: any, res) => {
+    try {
+      const items = await storage.getShoppingListItems(parseInt(req.params.id));
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching shopping list items:", error);
+      res.status(500).json({ message: "Failed to fetch shopping list items" });
+    }
+  });
+
+  app.post('/api/shopping-lists/:id/items', isAuthenticated, async (req: any, res) => {
+    try {
+      const item = await storage.addShoppingListItem({
+        ...req.body,
+        listId: parseInt(req.params.id),
+      });
+      res.json(item);
+    } catch (error) {
+      console.error("Error adding shopping list item:", error);
+      res.status(500).json({ message: "Failed to add shopping list item" });
+    }
+  });
+
+  app.put('/api/shopping-lists/items/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const item = await storage.updateShoppingListItem(
+        parseInt(req.params.id),
+        req.body
+      );
+      res.json(item);
+    } catch (error) {
+      console.error("Error updating shopping list item:", error);
+      res.status(500).json({ message: "Failed to update shopping list item" });
+    }
+  });
+
+  app.delete('/api/shopping-lists/items/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteShoppingListItem(parseInt(req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting shopping list item:", error);
+      res.status(500).json({ message: "Failed to delete shopping list item" });
+    }
+  });
+
+  app.post('/api/shopping-lists/generate', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { recipeIds, listName } = req.body;
+      const list = await storage.generateShoppingListFromRecipes(userId, recipeIds, listName);
+      res.json(list);
+    } catch (error) {
+      console.error("Error generating shopping list:", error);
+      res.status(500).json({ message: "Failed to generate shopping list" });
+    }
+  });
+
+  // PANTRY MANAGEMENT API
+  app.get('/api/pantry', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const items = await storage.getUserPantryItems(userId);
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching pantry items:", error);
+      res.status(500).json({ message: "Failed to fetch pantry items" });
+    }
+  });
+
+  app.post('/api/pantry', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const item = await storage.createPantryItem({
+        ...req.body,
+        userId,
+      });
+      res.json(item);
+    } catch (error) {
+      console.error("Error creating pantry item:", error);
+      res.status(500).json({ message: "Failed to create pantry item" });
+    }
+  });
+
+  app.put('/api/pantry/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const item = await storage.updatePantryItem(
+        parseInt(req.params.id),
+        req.body
+      );
+      res.json(item);
+    } catch (error) {
+      console.error("Error updating pantry item:", error);
+      res.status(500).json({ message: "Failed to update pantry item" });
+    }
+  });
+
+  app.delete('/api/pantry/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deletePantryItem(parseInt(req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting pantry item:", error);
+      res.status(500).json({ message: "Failed to delete pantry item" });
+    }
+  });
+
+  app.get('/api/pantry/expiring', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const days = parseInt(req.query.days as string) || 7;
+      const items = await storage.getExpiringItems(userId, days);
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching expiring items:", error);
+      res.status(500).json({ message: "Failed to fetch expiring items" });
+    }
+  });
+
+  // COOKING HISTORY & ANALYTICS API
+  app.get('/api/cooking-history', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const history = await storage.getUserCookingHistory(userId);
+      res.json(history);
+    } catch (error) {
+      console.error("Error fetching cooking history:", error);
+      res.status(500).json({ message: "Failed to fetch cooking history" });
+    }
+  });
+
+  app.post('/api/cooking-history', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const history = await storage.addCookingHistory({
+        ...req.body,
+        userId,
+      });
+      res.json(history);
+    } catch (error) {
+      console.error("Error adding cooking history:", error);
+      res.status(500).json({ message: "Failed to add cooking history" });
+    }
+  });
+
+  app.put('/api/cooking-history/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const history = await storage.updateCookingHistory(
+        parseInt(req.params.id),
+        req.body
+      );
+      res.json(history);
+    } catch (error) {
+      console.error("Error updating cooking history:", error);
+      res.status(500).json({ message: "Failed to update cooking history" });
+    }
+  });
+
+  app.get('/api/analytics', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const analytics = await storage.getCookingAnalytics(userId);
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
