@@ -1,32 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
 import { 
   ChefHat, 
-  Sparkles, 
-  Clock, 
-  Users, 
-  Star, 
-  Settings, 
-  TrendingUp, 
-  Calendar, 
-  ShoppingCart, 
-  Package, 
-  Zap, 
-  Heart, 
   DollarSign, 
-  Truck,
-  Plus,
-  ArrowRight,
-  Crown,
-  Target,
-  Activity
+  Package, 
+  Star, 
+  ShoppingCart,
+  Crown
 } from "lucide-react";
 import { Link } from "wouter";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -57,21 +43,6 @@ export default function Home() {
   const [generatedRecipes, setGeneratedRecipes] = useState<Recipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  const { data: recipes } = useQuery({
-    queryKey: ["/api/recipes"],
-    enabled: !!user,
-  });
-
-  const { data: recentActivity } = useQuery({
-    queryKey: ["/api/recent-activity"],
-    enabled: !!user,
-  });
-
-  const { data: stats } = useQuery({
-    queryKey: ["/api/user-stats"],
-    enabled: !!user,
-  });
 
   const generateRecipes = useMutation({
     mutationFn: async (data: { ingredients: string[]; dietaryRestrictions: string[] }) => {
@@ -120,16 +91,13 @@ export default function Home() {
     });
   };
 
-  // Default stats when API data isn't available
-  const userStats = stats || {
+  // Default stats for display
+  const userStats = {
     recipesGenerated: 12,
     monthlyLimit: 999,
-    recipesCooked: 8,
-    averageRating: 4.3,
     totalSavings: 85.50,
     pantryItems: 24,
-    shoppingLists: 3,
-    favoriteEquipment: "Air Fryer"
+    averageRating: 4.3
   };
 
   const remainingRecipes = userStats.monthlyLimit - userStats.recipesGenerated;
@@ -137,53 +105,29 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
-      {/* Enhanced Navigation */}
-      <div className="bg-white/90 backdrop-blur-sm border-b shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="flex items-center space-x-2">
-                <ChefHat className="h-8 w-8 text-primary" />
-                <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                  ChefAI
-                </span>
-              </Link>
-              <nav className="hidden md:flex space-x-6">
-                <Link href="/collections" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Collections
-                </Link>
-                <Link href="/shopping-lists" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Shopping
-                </Link>
-                <Link href="/pantry" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Pantry
-                </Link>
-                <Link href="/equipment" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Equipment
-                </Link>
-                <Link href="/nutrition" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Nutrition
-                </Link>
-                <Link href="/costs" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Costs
-                </Link>
-                <Link href="/grocery" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Grocery
-                </Link>
-                <Link href="/analytics" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Analytics
-                </Link>
-              </nav>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <ChefHat className="text-primary text-2xl mr-3" />
+              <h1 className="text-2xl font-playfair font-bold text-gray-900">ChefAI</h1>
             </div>
-            
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/collections" className="text-gray-700 hover:text-primary transition-colors">Collections</Link>
+              <Link href="/shopping-lists" className="text-gray-700 hover:text-primary transition-colors">Shopping</Link>
+              <Link href="/pantry" className="text-gray-700 hover:text-primary transition-colors">Pantry</Link>
+              <Link href="/analytics" className="text-gray-700 hover:text-primary transition-colors">Analytics</Link>
+              <Link href="/settings" className="text-gray-700 hover:text-primary transition-colors">Settings</Link>
+            </div>
             <div className="flex items-center space-x-4">
               {isProUser && (
                 <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
@@ -197,445 +141,165 @@ export default function Home() {
                   {user?.firstName?.[0] || user?.email?.[0]?.toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
-              <Link href="/settings">
-                <Button variant="ghost" size="sm">
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </Link>
+              <Button onClick={() => window.location.href = "/api/logout"} variant="outline" size="sm">
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Section */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Your Smart Kitchen
-            <span className="block text-3xl bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Powered by AI
-            </span>
+          <h1 className="text-4xl font-playfair font-bold text-gray-900 mb-4">
+            Welcome back, {user?.firstName || 'Chef'}!
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Generate recipes, manage your pantry, track nutrition, optimize costs, and transform your cooking experience
+            Your AI-powered kitchen companion is ready to help you create amazing meals from whatever ingredients you have.
           </p>
         </div>
 
         {/* Quick Stats Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <Card className="text-center">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-600 text-sm font-medium">Recipes Generated</p>
-                  <p className="text-2xl font-bold text-blue-900">{userStats.recipesGenerated}</p>
-                  <p className="text-xs text-blue-600">
-                    {remainingRecipes > 0 ? `${remainingRecipes} remaining` : "Upgrade for unlimited"}
-                  </p>
-                </div>
-                <ChefHat className="h-8 w-8 text-blue-600" />
+              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ChefHat className="h-8 w-8 text-primary" />
               </div>
+              <h3 className="text-xl font-semibold mb-2">{userStats.recipesGenerated}</h3>
+              <p className="text-gray-600 text-sm">Recipes Generated</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {remainingRecipes > 0 ? `${remainingRecipes} remaining this month` : "Unlimited recipes"}
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <Card className="text-center">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-green-600 text-sm font-medium">Monthly Savings</p>
-                  <p className="text-2xl font-bold text-green-900">${userStats.totalSavings}</p>
-                  <p className="text-xs text-green-600">Smart shopping optimization</p>
-                </div>
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="h-8 w-8 text-green-600" />
               </div>
+              <h3 className="text-xl font-semibold mb-2">${userStats.totalSavings}</h3>
+              <p className="text-gray-600 text-sm">Monthly Savings</p>
+              <p className="text-xs text-gray-500 mt-1">Smart shopping optimization</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <Card className="text-center">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-purple-600 text-sm font-medium">Pantry Items</p>
-                  <p className="text-2xl font-bold text-purple-900">{userStats.pantryItems}</p>
-                  <p className="text-xs text-purple-600">Ingredients tracked</p>
-                </div>
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Package className="h-8 w-8 text-purple-600" />
               </div>
+              <h3 className="text-xl font-semibold mb-2">{userStats.pantryItems}</h3>
+              <p className="text-gray-600 text-sm">Pantry Items</p>
+              <p className="text-xs text-gray-500 mt-1">Ingredients tracked</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <Card className="text-center">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-orange-600 text-sm font-medium">Avg Rating</p>
-                  <p className="text-2xl font-bold text-orange-900">{userStats.averageRating}★</p>
-                  <p className="text-xs text-orange-600">Recipe satisfaction</p>
-                </div>
-                <Star className="h-8 w-8 text-orange-600" />
+              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="h-8 w-8 text-yellow-600" />
               </div>
+              <h3 className="text-xl font-semibold mb-2">{userStats.averageRating}★</h3>
+              <p className="text-gray-600 text-sm">Average Rating</p>
+              <p className="text-xs text-gray-500 mt-1">Recipe satisfaction</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Recipe Generation Section */}
-        <Card className="mb-12 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg">
-            <CardTitle className="text-2xl flex items-center">
-              <Sparkles className="h-6 w-6 mr-2" />
-              Generate AI Recipes
-            </CardTitle>
-            <p className="text-orange-100">
-              Add ingredients you have and get personalized recipe suggestions
-            </p>
-          </CardHeader>
-          <CardContent className="p-6">
-            <IngredientInput
-              selectedIngredients={selectedIngredients}
-              onIngredientsChange={setSelectedIngredients}
-              onGenerate={() => handleGenerate([])}
-              isGenerating={isGenerating}
-              remainingRecipes={remainingRecipes}
-            />
-          </CardContent>
-        </Card>
+        <section className="bg-gradient-warm py-16 -mx-4 sm:-mx-6 lg:-mx-8 mb-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
+                Generate Your Next Meal
+              </h2>
+              <p className="text-xl text-gray-600">
+                Add your available ingredients and let AI create personalized recipes just for you
+              </p>
+            </div>
 
-        {/* Complete Platform Overview */}
+            <Card className="shadow-xl">
+              <CardContent className="p-8">
+                <IngredientInput
+                  selectedIngredients={selectedIngredients}
+                  onIngredientsChange={setSelectedIngredients}
+                  onGenerate={() => handleGenerate([])}
+                  isGenerating={isGenerating}
+                  remainingRecipes={remainingRecipes}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Features Overview */}
         <div className="mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Complete Smart Kitchen Platform
+            <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
+              Your Complete Kitchen Assistant
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              Transform your cooking experience with 8 comprehensive features covering every aspect of modern kitchen management
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Explore all the tools available to enhance your cooking experience
             </p>
           </div>
 
-          {/* Core AI Features */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">🤖 AI-Powered Core Features</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-orange-200">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <Sparkles className="h-8 w-8 text-orange-600 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">AI Recipe Generation</h4>
-                      <p className="text-sm text-gray-600 mb-3">
-                        Generate personalized recipes from available ingredients with dietary restrictions support
-                      </p>
-                      <ul className="text-xs text-gray-500 space-y-1">
-                        <li>• 11 dietary preference options (vegetarian, vegan, keto, etc.)</li>
-                        <li>• Step-by-step cooking instructions</li>
-                        <li>• Ingredient substitution suggestions</li>
-                        <li>• Nutrition analysis integration</li>
-                      </ul>
-                    </div>
+          {/* Main Features */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Link href="/collections">
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-8">
+                  <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Package className="h-8 w-8 text-primary" />
                   </div>
+                  <h3 className="text-xl font-semibold mb-3">Recipe Collections</h3>
+                  <p className="text-gray-600">
+                    Organize and save your favorite recipes in custom collections for easy access.
+                  </p>
                 </CardContent>
               </Card>
+            </Link>
 
-              <Link href="/collections">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <Package className="h-8 w-8 text-blue-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Recipe Collections</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Organize and categorize your favorite recipes into custom collections
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Create themed collections (breakfast, dinner, etc.)</li>
-                          <li>• Tag and search functionality</li>
-                          <li>• Share collections with family</li>
-                          <li>• Recipe rating and review system</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-blue-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </div>
-          </div>
-
-          {/* Kitchen Management */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">🏠 Kitchen Management Suite</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Link href="/pantry">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <Package className="h-8 w-8 text-purple-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Smart Pantry</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Track ingredients with expiration alerts and categorization
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Expiration date tracking</li>
-                          <li>• Automatic categorization</li>
-                          <li>• Low stock notifications</li>
-                          <li>• Inventory optimization</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-purple-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/shopping-lists">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <ShoppingCart className="h-8 w-8 text-green-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Shopping Lists</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Auto-generate and manage shopping lists from recipes
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Recipe-to-list automation</li>
-                          <li>• Store aisle organization</li>
-                          <li>• Price comparison integration</li>
-                          <li>• Shared family lists</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-green-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/equipment">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <Zap className="h-8 w-8 text-cyan-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Smart Equipment</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Manage kitchen appliances and smart device connectivity
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• WiFi device integration</li>
-                          <li>• Usage analytics</li>
-                          <li>• Maintenance scheduling</li>
-                          <li>• Recipe-appliance matching</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-cyan-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </div>
-          </div>
-
-          {/* Advanced Intelligence */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">📊 Advanced Intelligence & Optimization</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Link href="/nutrition">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-red-50 to-pink-50 border-red-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <Heart className="h-8 w-8 text-red-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Health & Nutrition</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Monitor nutrition goals and daily intake with detailed analytics
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Macro/micro nutrient tracking</li>
-                          <li>• Custom health goals</li>
-                          <li>• Meal planning optimization</li>
-                          <li>• Nutritional recommendations</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-red-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/costs">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <DollarSign className="h-8 w-8 text-yellow-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Cost Management</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Track recipe costs and ingredient pricing for budget optimization
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Recipe cost calculation</li>
-                          <li>• Budget tracking & alerts</li>
-                          <li>• Price trend analysis</li>
-                          <li>• Savings opportunities</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-yellow-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link href="/analytics">
-                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <TrendingUp className="h-8 w-8 text-indigo-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Cooking Analytics</h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Track cooking patterns and view detailed performance insights
-                        </p>
-                        <ul className="text-xs text-gray-500 space-y-1">
-                          <li>• Cooking frequency analysis</li>
-                          <li>• Recipe success rates</li>
-                          <li>• Cuisine preferences</li>
-                          <li>• Progress tracking</li>
-                        </ul>
-                        <ArrowRight className="h-4 w-4 text-indigo-600 mt-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </div>
-          </div>
-
-          {/* Smart Shopping & Delivery */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">🛒 Smart Shopping & Delivery</h3>
-            <Link href="/grocery">
-              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
+            <Link href="/shopping-lists">
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-8">
-                  <div className="flex items-start space-x-6">
-                    <Truck className="h-12 w-12 text-teal-600 mt-1" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-3 text-lg">Smart Grocery & Delivery Integration</h4>
-                      <p className="text-gray-600 mb-4">
-                        Optimize grocery orders across multiple stores with intelligent delivery scheduling and price comparison
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <ul className="text-sm text-gray-500 space-y-2">
-                          <li>• Multi-store price comparison</li>
-                          <li>• Delivery time optimization</li>
-                          <li>• Bulk purchase recommendations</li>
-                          <li>• Seasonal produce alerts</li>
-                        </ul>
-                        <ul className="text-sm text-gray-500 space-y-2">
-                          <li>• Store loyalty integration</li>
-                          <li>• Deal and coupon matching</li>
-                          <li>• Delivery route optimization</li>
-                          <li>• Automatic reordering</li>
-                        </ul>
-                      </div>
-                      <ArrowRight className="h-5 w-5 text-teal-600 mt-4" />
-                    </div>
+                  <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <ShoppingCart className="h-8 w-8 text-green-600" />
                   </div>
+                  <h3 className="text-xl font-semibold mb-3">Smart Shopping</h3>
+                  <p className="text-gray-600">
+                    Auto-generate shopping lists from recipes and track your grocery needs.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/pantry">
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-8">
+                  <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Package className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Pantry Management</h3>
+                  <p className="text-gray-600">
+                    Track ingredients and get alerts before items expire in your pantry.
+                  </p>
                 </CardContent>
               </Card>
             </Link>
           </div>
-
-          {/* Platform Benefits */}
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-8 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose ChefAI Platform?</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Sparkles className="h-8 w-8 text-blue-600" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">AI-Powered</h4>
-                <p className="text-sm text-gray-600">Advanced AI generates personalized recipes and recommendations</p>
-              </div>
-              <div>
-                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Target className="h-8 w-8 text-green-600" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">All-in-One</h4>
-                <p className="text-sm text-gray-600">Complete kitchen management in a single integrated platform</p>
-              </div>
-              <div>
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Activity className="h-8 w-8 text-purple-600" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Smart Analytics</h4>
-                <p className="text-sm text-gray-600">Data-driven insights to optimize your cooking and spending</p>
-              </div>
-              <div>
-                <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Users className="h-8 w-8 text-orange-600" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Family-Friendly</h4>
-                <p className="text-sm text-gray-600">Designed for households with sharing and collaboration features</p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Link href="/pantry">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <Package className="h-8 w-8 text-purple-600" />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Manage Pantry</h3>
-                    <p className="text-sm text-gray-600">Track ingredients and expiration dates</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link href="/shopping-lists">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <ShoppingCart className="h-8 w-8 text-green-600" />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Shopping Lists</h3>
-                    <p className="text-sm text-gray-600">Auto-generate from recipes</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link href="/analytics">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">View Analytics</h3>
-                    <p className="text-sm text-gray-600">Track your cooking progress</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-
-        {/* Generated Recipes */}
+        {/* Generated Recipes Section */}
         {generatedRecipes.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Your AI-Generated Recipes
-            </h2>
+          <div className="mt-12">
+            <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-6">Your Generated Recipes</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {generatedRecipes.map((recipe) => (
+              {generatedRecipes.map((recipe, index) => (
                 <RecipeCard
-                  key={recipe.id}
+                  key={index}
                   recipe={recipe}
                   onView={() => setSelectedRecipe(recipe)}
                 />
@@ -644,57 +308,54 @@ export default function Home() {
           </div>
         )}
 
-        {/* Recent Recipes */}
-        {recipes && Array.isArray(recipes) && recipes.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Recent Recipes</h2>
-              <Link href="/collections">
-                <Button variant="outline">
-                  View All
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recipes.slice(0, 6).map((recipe: Recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onView={() => setSelectedRecipe(recipe)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Upgrade Prompt for Free Users */}
-        {!isProUser && (
-          <Card className="mt-12 bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
-            <CardContent className="p-8 text-center">
-              <Crown className="h-12 w-12 text-yellow-300 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-2">Unlock Your Full Kitchen Potential</h3>
-              <p className="text-orange-100 mb-6">
-                Get unlimited recipes, advanced analytics, and premium features
-              </p>
-              <Link href="/subscribe">
-                <Button size="lg" className="bg-white text-orange-600 hover:bg-gray-100">
-                  Upgrade to Pro
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        {/* Recipe Modal */}
+        {selectedRecipe && (
+          <RecipeModal
+            recipe={selectedRecipe}
+            onClose={() => setSelectedRecipe(null)}
+          />
         )}
       </div>
 
-      {/* Recipe Modal */}
-      {selectedRecipe && (
-        <RecipeModal
-          recipe={selectedRecipe}
-          onClose={() => setSelectedRecipe(null)}
-        />
-      )}
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <ChefHat className="text-primary text-2xl mr-3" />
+                <h3 className="text-2xl font-playfair font-bold">ChefAI</h3>
+              </div>
+              <p className="text-gray-400">
+                Your AI-powered kitchen companion for creating amazing meals from available ingredients.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Features</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/collections" className="hover:text-white transition-colors">Recipe Collections</Link></li>
+                <li><Link href="/shopping-lists" className="hover:text-white transition-colors">Shopping Lists</Link></li>
+                <li><Link href="/pantry" className="hover:text-white transition-colors">Pantry Management</Link></li>
+                <li><Link href="/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Account</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/settings" className="hover:text-white transition-colors">Settings</Link></li>
+                <li><Link href="/subscribe" className="hover:text-white transition-colors">Upgrade Plan</Link></li>
+                <li><button onClick={() => window.location.href = "/api/logout"} className="hover:text-white transition-colors text-left">Sign Out</button></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 ChefAI. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
