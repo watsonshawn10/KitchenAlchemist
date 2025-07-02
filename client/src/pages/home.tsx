@@ -474,6 +474,60 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Account & Subscription Management */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">⚙️ Account & Subscription Management</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <Link href="/settings">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center">
+                        <div className="text-xl">⚙️</div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Account Settings</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Manage your profile, dietary preferences, and notification settings
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Profile customization</li>
+                          <li>• Dietary restrictions & preferences</li>
+                          <li>• Notification preferences</li>
+                          <li>• Privacy settings</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/subscribe">
+                <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center">
+                        <div className="text-xl">💎</div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Premium Subscriptions</h4>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Upgrade to unlock unlimited recipes and premium features
+                        </p>
+                        <ul className="text-xs text-gray-500 space-y-1">
+                          <li>• Unlimited recipe generation</li>
+                          <li>• Advanced meal planning features</li>
+                          <li>• Priority customer support</li>
+                          <li>• Exclusive content & recipes</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </div>
+
           {/* Benefits Summary */}
           <div className="bg-gradient-to-r from-primary/10 to-orange-100 rounded-2xl p-8">
             <div className="text-center">
@@ -545,12 +599,33 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Features</h4>
+              <h4 className="font-semibold mb-4">Core Features</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/collections" className="hover:text-white transition-colors">Recipe Collections</Link></li>
                 <li><Link href="/shopping-lists" className="hover:text-white transition-colors">Shopping Lists</Link></li>
                 <li><Link href="/pantry" className="hover:text-white transition-colors">Pantry Management</Link></li>
-                <li><Link href="/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+                <li><Link href="/analytics" className="hover:text-white transition-colors">Cooking Analytics</Link></li>
+                <li><Link href="/budget-meal-planner" className="hover:text-white transition-colors">Budget Meal Planner</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Smart Kitchen</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/equipment" className="hover:text-white transition-colors">Equipment Manager</Link></li>
+                <li><Link href="/grocery" className="hover:text-white transition-colors">Smart Grocery</Link></li>
+                <li><Link href="/nutrition" className="hover:text-white transition-colors">Nutrition Tracking</Link></li>
+                <li><Link href="/costs" className="hover:text-white transition-colors">Cost Management</Link></li>
+                <li><Link href="/settings" className="hover:text-white transition-colors">Account Settings</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Account</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/subscribe" className="hover:text-white transition-colors">Premium Plans</Link></li>
+                <li><Link href="/settings" className="hover:text-white transition-colors">Settings</Link></li>
+                <li><a href="/api/logout" className="hover:text-white transition-colors">Sign Out</a></li>
               </ul>
             </div>
 
