@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "client/**/*",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/$1"
+    }
+  ],
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
